@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Do You Love Me?</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #ffc0cb;
+      background-image: url('https://i.imgur.com/GDdmUpo.png');
+      background-repeat: repeat;
+      background-size: 120px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+      text-align: center;
+      overflow: hidden;
+    }
+
+    h1 {
+      color: #fff;
+      font-size: 4rem;
+      margin-bottom: 40px;
+      font-weight: bold;
+      text-shadow: 0 0 10px #ff4081, 0 0 20px #f50057;
+      animation: glow 2s infinite alternate;
+    }
+
+    @keyframes glow {
+      from { text-shadow: 0 0 10px #f06292; }
+      to { text-shadow: 0 0 20px #ec407a, 0 0 30px #f48fb1; }
+    }
+
+    .btn {
+      padding: 20px 50px;
+      font-size: 1.8rem;
+      margin: 15px;
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-weight: 600;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+      position: relative;
+    }
+
+    .yes {
+      background: linear-gradient(45deg, #ff4081, #f50057);
+      color: white;
+    }
+
+    .yes:hover {
+      transform: scale(1.1);
+      box-shadow: 0 0 20px #ff4081;
+    }
+
+    .no {
+      background-color: #ef9a9a;
+      color: white;
+      position: absolute;
+    }
+
+    .message {
+      margin-top: 30px;
+      font-size: 2rem;
+      color: #880e4f;
+      font-weight: bold;
+      animation: fadeIn 1s ease-in-out;
+    }
+
+    .poem {
+      margin-top: 30px;
+      font-size: 1.8rem;
+      color: #6a1b9a;
+      font-style: italic;
+      max-width: 600px;
+      text-shadow: 1px 1px 5px #fff;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .hearts-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: 0;
+    }
+
+    .heart {
+      position: absolute;
+      width: 25px;
+      height: 25px;
+      fill: #e91e63;
+      opacity: 0.8;
+      animation-name: floatUp;
+      animation-timing-function: linear;
+      animation-iteration-count: infinite;
+    }
+
+    @keyframes floatUp {
+      0% {
+        transform: translateY(100vh) scale(0.5) rotate(0deg);
+        opacity: 0;
+      }
+      50% {
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(-10vh) scale(1.2) rotate(360deg);
+        opacity: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Do you love me?</h1>
+  <div>
+    <button class="btn yes" onclick="sayYes()">Yes 💖</button>
+    <button class="btn no" id="noBtn" onmouseover="moveNoButton()">No 💔</button>
+  </div>
+  <div class="message" id="message"></div>
+  <div class="poem" id="poem"></div>
+
+  <div class="hearts-container" id="heartsContainer"></div>
+
+  <!-- Confetti library -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+  <script>
+    const noBtn = document.getElementById("noBtn");
+    const heartsContainer = document.getElementById("heartsContainer");
+
+    function sayYes() {
+      document.getElementById("message").textContent = "I love you tooo baby 💕💘";
+      document.getElementById("poem").innerHTML =
+        "“Tere bina adhura hoon main,<br>" +
+        "Har khushi se door hoon main,<br>" +
+        "Tere honthon ki muskaan chahiye,<br>" +
+        "Sirf tu chahiye, bas tu chahiye…” 💞";
+      launchFirecrackers();
+    }
+
+    function moveNoButton() {
+      const maxX = window.innerWidth - noBtn.offsetWidth;
+      const maxY = window.innerHeight - noBtn.offsetHeight;
+      const randomX = Math.floor(Math.random() * maxX);
+      const randomY = Math.floor(Math.random() * maxY);
+      noBtn.style.left = `${randomX}px`;
+      noBtn.style.top = `${randomY}px`;
+    }
+
+    function launchFirecrackers() {
+      for (let i = 0; i < 5; i++) {
+        setTimeout(() => {
+          confetti({
+            particleCount: 100,
+            spread: 70 + Math.random() * 30,
+            origin: {
+              x: Math.random(),
+              y: Math.random() * 0.6
+            }
+          });
+        }, i * 400);
+      }
+    }
+
+    // Create floating SVG heart
+    function createHeart() {
+      const svgns = "http://www.w3.org/2000/svg";
+      const heart = document.createElementNS(svgns, "svg");
+      heart.setAttribute("class", "heart");
+      heart.setAttribute("viewBox", "0 0 24 24");
+      heart.style.left = Math.random() * 100 + "vw";
+      heart.style.animationDuration = (5 + Math.random() * 5) + "s";
+
+      const path = document.createElementNS(svgns, "path");
+      path.setAttribute("d", "M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41 0.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z");
+      heart.appendChild(path);
+
+      heartsContainer.appendChild(heart);
+
+      setTimeout(() => {
+        heart.remove();
+      }, 10000);
+    }
+
+    // Spawn hearts every 400ms
+    setInterval(createHeart, 400);
+  </script>
+
+</body>
+</html>
